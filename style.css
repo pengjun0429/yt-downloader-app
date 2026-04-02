@@ -1,3 +1,99 @@
+Skip to content
+pengjun0429
+yt-downloader-app
+Repository navigation
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security and quality
+Insights
+Settings
+yt-downloader-app
+/
+style.css
+in
+main
+
+Edit
+
+Preview
+Indent mode
+
+Spaces
+Indent size
+
+4
+Line wrap mode
+
+No wrap
+Editing style.css file contents
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
 :root {
     --glass-bg: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);
@@ -62,69 +158,4 @@ body {
     border-radius: 24px;
     padding: 40px;
     width: 400px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    text-align: center;
-}
-
-h1 { font-size: 1.8rem; margin-bottom: 10px; }
-p { color: #cbd5e1; font-size: 0.9rem; margin-bottom: 25px; }
-
-.input-group input {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-    outline: none;
-}
-
-.verify-row {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-primary {
-    width: 100%;
-    padding: 12px;
-    background: white;
-    color: #0f172a;
-    border: none;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
-
-.btn-small {
-    padding: 0 15px;
-    height: 42px;
-    border-radius: 10px;
-    background: var(--accent-color);
-    border: none;
-    color: white;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.divider {
-    margin: 20px 0;
-    position: relative;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-.divider span {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1e293b;
-    padding: 0 10px;
-    font-size: 0.8rem;
-}
-
-.footer-text { margin-top: 20px; cursor: pointer; }
-.footer-text span { color: var(--accent-color); text-decoration: underline; }
+Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
