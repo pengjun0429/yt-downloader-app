@@ -1,4 +1,4 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyJSOvHIeetlMz742yUhjSbXumqzWI6sEPe8s4NY5upR03H4IfzvkVwJ4dJB1awt3hK/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbz2-K7oLmGh5RMfaBS-7wokxbnLnmymqEaDrUuXEwYjhi1Lzm5PzitlVpGjCsBsYc0c/exec";
 
 function switchCard(cardId) {
     document.querySelectorAll('.glass-card').forEach(card => card.style.display = 'none');
