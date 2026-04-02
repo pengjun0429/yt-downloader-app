@@ -1,76 +1,122 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbweleJf0CMK5Ij3ogPOnLHrt6ec4KxyBY3s6B-Q56XYN4rGeqPlh2DfZvUGx5CFNjHG/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzL61TXaqcDok8wEGdIdV_J1pWgGQlhiIJKr8VtNYcKHH583YPDhTvAIt7lIv8BoLfy/execc";
+const GUEST_LIMIT = 10;
+let currentUser = null; // null 表示訪客狀態
+
+// 初始化頁面
+window.onload = function() {
+    checkUserStatus();
+};
 
 function switchCard(cardId) {
-    document.querySelectorAll('.glass-card').forEach(card => card.style.display = 'none');
+    document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
     document.getElementById(cardId).style.display = 'block';
 }
 
-// 1. 發送 Email 驗證碼
-async function sendOTP() {
-    const email = document.getElementById('reg-email').value;
-    if(!email) return alert("請輸入 Email");
-    
-    const res = await fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "sendOTP", email: email })
-    });
-    const result = await res.json();
-    if(result.status === "sent") alert("驗證碼已寄出！");
+function checkUserStatus() {
+    const savedUser = localStorage.getItem('yt_user');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        document.getElementById('auth-hint').style.display = 'none';
+        document.getElementById('logout-btn').style.display = 'block';
+    } else {
+        currentUser = null;
+        document.getElementById('auth-hint').style.display = 'block';
+        document.getElementById('logout-btn').style.display = 'none';
+    }
+    updateQuotaUI();
 }
 
-// 2. 註冊邏輯
+function updateQuotaUI() {
+    const qCount = document.getElementById('quota-count');
+    const uStatus = document.getElementById('user-status');
+
+    if (!currentUser) {
+        let used = parseInt(localStorage.getItem('guest_used') || 0);
+        let remain = Math.max(0, GUEST_LIMIT - used);
+        uStatus.innerHTML = `身分：訪客 (剩餘 <span id="quota-count">${remain}</span> 次)`;
+    } else {
+        uStatus.innerHTML = `身分：${currentUser.email} (剩餘 <span id="quota-count">${currentUser.quota}</span> 次)`;
+    }
+}
+
+// 核心下載功能
+async function startDownload() {
+    const url = document.getElementById('yt-url').value;
+    if (!url) return alert("請貼上網址");
+
+    let payload = { action: "download", url: url };
+
+    if (!currentUser) {
+        let used = parseInt(localStorage.getItem('guest_used') || 0);
+        if (used >= GUEST_LIMIT) return alert("訪客額度已滿，請登入獲取 20 次機會！");
+        payload.isGuest = true;
+    } else {
+        payload.email = currentUser.email;
+        payload.isGuest = false;
+    }
+
+    try {
+        const res = await fetch(GAS_URL, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.status === "success") {
+            if (!currentUser) {
+                localStorage.setItem('guest_used', parseInt(localStorage.getItem('guest_used') || 0) + 1);
+            } else {
+                currentUser.quota = data.remainingQuota;
+                localStorage.setItem('yt_user', JSON.stringify(currentUser));
+            }
+            updateQuotaUI();
+            window.open(data.downloadLink, '_blank');
+        } else {
+            alert(data.message);
+        }
+    } catch (e) {
+        alert("連線失敗，請檢查後端 GAS 部署權限是否設為『任何人』");
+    }
+}
+
+// 註冊與登入功能
+async function sendOTP() {
+    const email = document.getElementById('reg-email').value;
+    if (!email) return alert("請輸入 Email");
+    await fetch(GAS_URL, { method: "POST", body: JSON.stringify({ action: "sendOTP", email }) });
+    alert("驗證碼已寄出");
+}
+
 async function handleRegister() {
     const email = document.getElementById('reg-email').value;
     const otp = document.getElementById('reg-otp').value;
     const pass = document.getElementById('reg-pass').value;
 
-    const res = await fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "register", email, otp, pass })
-    });
-    const result = await res.json();
-    if(result.status === "success") {
-        alert("註冊成功！");
-        switchCard('login-card');
-    } else {
-        alert("註冊失敗：" + result.message);
+    const res = await fetch(GAS_URL, { method: "POST", body: JSON.stringify({ action: "register", email, otp, pass }) });
+    const data = await res.json();
+    if (data.status === "success") {
+        currentUser = { email: email, quota: 20 };
+        localStorage.setItem('yt_user', JSON.stringify(currentUser));
+        checkUserStatus();
+        switchCard('download-card');
     }
 }
 
-// 3. Google 登入回傳處理
-function handleCredentialResponse(response) {
-    console.log("Encoded JWT ID token: " + response.credential);
-    // 將 token 傳給 GAS 驗證並建立使用者
-    fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "googleLogin", token: response.credential })
-    }).then(res => res.json()).then(data => {
-        if(data.status === "success") {
-            loginSuccess(data.quota);
-        }
-    });
+function logout() {
+    localStorage.removeItem('yt_user');
+    checkUserStatus();
+    alert("已登出");
 }
 
-function loginSuccess(quota) {
-    document.getElementById('quota-count').innerText = quota;
-    switchCard('download-card');
-}
-
-// 4. 下載功能
-async function startDownload() {
-    const url = document.getElementById('yt-url').value;
-    if(!url) return alert("請輸入網址");
-
-    const res = await fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "download", url: url })
-    });
-    const result = await res.json();
-    
-    if(result.status === "success") {
-        window.open(result.downloadLink, '_blank');
-        document.getElementById('quota-count').innerText = result.remainingQuota;
-    } else {
-        alert("下載次數不足或發生錯誤");
+// Google 登入回調
+async function handleCredentialResponse(response) {
+    const res = await fetch(GAS_URL, { method: "POST", body: JSON.stringify({ action: "googleLogin", token: response.credential }) });
+    const data = await res.json();
+    if (data.status === "success") {
+        currentUser = { email: data.email, quota: data.quota };
+        localStorage.setItem('yt_user', JSON.stringify(currentUser));
+        checkUserStatus();
+        switchCard('download-card');
     }
 }
