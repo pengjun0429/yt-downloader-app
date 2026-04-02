@@ -159,3 +159,41 @@ body {
     padding: 40px;
     width: 400px;
 Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
+    /* 核心：美化 YouTube 網址輸入框 */
+input#yt-url {
+    width: 100%;                  /* 寬度填滿 */
+    padding: 15px 20px;           /* 內部留白，文字更舒適 */
+    margin: 15px 0;               /* 與上下元素的距離 */
+    border-radius: 12px;          /* ***關鍵：圓角***，看起來更柔和 */
+    
+    /* ***關鍵：玻璃擬態背景*** */
+    background: rgba(255, 255, 255, 0.08); /* 超低透明度的白色 */
+    backdrop-filter: blur(10px);        /* 毛玻璃模糊 */
+    -webkit-backdrop-filter: blur(10px); /* 兼容性 */
+    
+    /* 細邊框，營造玻璃質感 */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    
+    /* 文字與 Placeholder 樣式 */
+    color: white;                 /* 輸入的文字為白色 */
+    font-size: 1rem;              /* 字體大小 */
+    font-family: 'Segoe UI', sans-serif; /* 字體 */
+    outline: none;                /* 移除點擊時出現的預設粗邊框 */
+    
+    /* 動態過場效果 */
+    transition: 0.3s ease-all;    
+    box-sizing: border-box;       /* 確保 Padding 不會撐破寬度 */
+}
+
+/* 當 Placeholder (貼上 YouTube 網址...) 顯示時的樣式 */
+input#yt-url::placeholder {
+    color: rgba(255, 255, 255, 0.6); /* Placeholder 為半透明白色 */
+    font-style: italic;           /* 斜體 */
+}
+
+/* ***關鍵：點擊（Focus）時的動態效果*** */
+input#yt-url:focus {
+    background: rgba(255, 255, 255, 0.12); /* 背景稍微變亮 */
+    border-color: #00d2ff;        /* 邊框變為網站主色（亮藍） */
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.3); /* 淡淡的外發光效果 */
+}
