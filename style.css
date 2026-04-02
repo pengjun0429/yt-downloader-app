@@ -1,199 +1,244 @@
-Skip to content
-pengjun0429
-yt-downloader-app
-Repository navigation
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security and quality
-Insights
-Settings
-yt-downloader-app
-/
-style.css
-in
-main
-
-Edit
-
-Preview
-Indent mode
-
-Spaces
-Indent size
-
-4
-Line wrap mode
-
-No wrap
-Editing style.css file contents
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
+/* 定義全域變數，方便統一修改顏色 */
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --primary-color: #ffffff;
-    --accent-color: #00d2ff;
+    --glass-bg: rgba(255, 255, 255, 0.07);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --primary-white: #ffffff;
+    --accent-blue: #00d2ff;
+    --accent-purple: #892fe2;
+    --error-red: #ff5050;
+    --input-bg: rgba(0, 0, 0, 0.25);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', 'Roboto', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #0f172a;
-    color: white;
+    background: #0f172a; /* 深藍底色 */
+    color: var(--primary-white);
     height: 100vh;
-    overflow: hidden;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    position: relative;
 }
 
-/* 背景裝飾色塊 */
+/* --- 背景動態流體感 --- */
 .background-blobs {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: -1;
+    filter: blur(80px);
 }
 
 .blob {
     position: absolute;
-    width: 400px;
-    height: 400px;
-    background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
-    filter: blur(80px);
+    width: 500px;
+    height: 500px;
     border-radius: 50%;
     opacity: 0.5;
-    animation: move 20s infinite alternate;
+    animation: moveBlobs 20s infinite alternate ease-in-out;
+}
+
+.blob:nth-child(1) {
+    background: linear-gradient(135deg, #3a7bd5, var(--accent-blue));
+    top: -10%;
+    left: -10%;
 }
 
 .blob:nth-child(2) {
-    background: linear-gradient(135deg, #892fe2 0%, #ff0080 100%);
-    right: 10%;
-    bottom: 10%;
-    animation-delay: -5s;
+    background: linear-gradient(135deg, var(--accent-purple), #ff0080);
+    bottom: -10%;
+    right: -10%;
+    animation-delay: -7s;
 }
 
-@keyframes move {
-    from { transform: translate(-10%, -10%); }
-    to { transform: translate(10%, 10%); }
+@keyframes moveBlobs {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(15%, 10%) scale(1.1); }
 }
 
-/* 玻璃卡片主體 */
+/* --- 玻璃卡片主體 --- */
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid var(--glass-border);
-    border-radius: 24px;
+    border-radius: 28px;
     padding: 40px;
-    width: 400px;
-Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
-    /* 核心：美化 YouTube 網址輸入框 */
-input#yt-url {
-    width: 100%;                  /* 寬度填滿 */
-    padding: 15px 20px;           /* 內部留白，文字更舒適 */
-    margin: 15px 0;               /* 與上下元素的距離 */
-    border-radius: 12px;          /* ***關鍵：圓角***，看起來更柔和 */
-    
-    /* ***關鍵：玻璃擬態背景*** */
-    background: rgba(255, 255, 255, 0.08); /* 超低透明度的白色 */
-    backdrop-filter: blur(10px);        /* 毛玻璃模糊 */
-    -webkit-backdrop-filter: blur(10px); /* 兼容性 */
-    
-    /* 細邊框，營造玻璃質感 */
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    
-    /* 文字與 Placeholder 樣式 */
-    color: white;                 /* 輸入的文字為白色 */
-    font-size: 1rem;              /* 字體大小 */
-    font-family: 'Segoe UI', sans-serif; /* 字體 */
-    outline: none;                /* 移除點擊時出現的預設粗邊框 */
-    
-    /* 動態過場效果 */
-    transition: 0.3s ease-all;    
-    box-sizing: border-box;       /* 確保 Padding 不會撐破寬度 */
+    width: 90%;
+    max-width: 420px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    transition: transform 0.3s ease;
 }
 
-/* 當 Placeholder (貼上 YouTube 網址...) 顯示時的樣式 */
-input#yt-url::placeholder {
-    color: rgba(255, 255, 255, 0.6); /* Placeholder 為半透明白色 */
-    font-style: italic;           /* 斜體 */
+h1 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+    background: linear-gradient(to right, #fff, var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* ***關鍵：點擊（Focus）時的動態效果*** */
-input#yt-url:focus {
-    background: rgba(255, 255, 255, 0.12); /* 背景稍微變亮 */
-    border-color: #00d2ff;        /* 邊框變為網站主色（亮藍） */
-    box-shadow: 0 0 15px rgba(0, 210, 255, 0.3); /* 淡淡的外發光效果 */
+p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+}
+
+/* --- 重點優化：輸入框樣式 --- */
+input[type="text"], 
+input[type="email"], 
+input[type="password"] {
+    width: 100%;
+    padding: 14px 20px;
+    margin-bottom: 18px;
+    border-radius: 14px; /* 圓潤現代感 */
+    border: 1px solid var(--glass-border);
+    background: var(--input-bg);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 輸入框 Placeholder (提示文字) 顏色 */
+input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+}
+
+/* 輸入框點擊後的發光效果 */
+input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.3), 
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* --- 按鈕樣式 --- */
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-white);
+    color: #0f172a;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 5px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.15);
+    background: #f8fafc;
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+.btn-outline {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: #cbd5e1;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-color: white;
+}
+
+/* --- 註冊區塊的排版 --- */
+.verify-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-small {
+    height: 50px; /* 配合 input 高度 */
+    padding: 0 18px;
+    border-radius: 12px;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 18px; /* 對齊 input */
+}
+
+.btn-small:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 12px rgba(0, 210, 255, 0.4);
+}
+
+/* --- 其他元件 --- */
+.divider {
+    margin: 25px 0;
+    border-bottom: 1px solid var(--glass-border);
+    position: relative;
+}
+
+.divider span {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #151e33; /* 配合背景 */
+    padding: 0 15px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.footer-text {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.footer-text span {
+    color: var(--accent-blue);
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.footer-text span:hover {
+    text-decoration: underline;
+}
+
+/* --- 錯誤介面專屬樣式 --- */
+#error-card {
+    border: 1.5px solid rgba(255, 80, 80, 0.3);
+}
+
+#error-card h1 {
+    background: linear-gradient(to right, #ff8080, var(--error-red));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
