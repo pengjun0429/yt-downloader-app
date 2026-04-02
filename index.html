@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YT Downloader - 玻璃擬態版</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+    <div class="background-blobs">
+        <div class="blob"></div>
+        <div class="blob"></div>
+    </div>
+
+    <div class="container">
+        <div id="login-card" class="glass-card">
+            <h1>使用者登入</h1>
+            <p>每日享有 20 次免費下載機會</p>
+            
+            <div class="input-group">
+                <input type="email" id="login-email" placeholder="電子郵件" required>
+                <input type="password" id="login-pass" placeholder="密碼" required>
+            </div>
+            
+            <button class="btn-primary" onclick="handleLogin()">登入</button>
+            
+            <div class="divider"><span>或使用</span></div>
+            
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                 data-callback="handleCredentialResponse">
+            </div>
+            <div class="g_id_signin" data-type="standard"></div>
+
+            <p class="footer-text">沒有帳號？ <span onclick="switchCard('register-card')">立即註冊</span></p>
+        </div>
+
+        <div id="register-card" class="glass-card" style="display: none;">
+            <h1>會員註冊</h1>
+            <div class="input-group">
+                <div class="verify-row">
+                    <input type="email" id="reg-email" placeholder="電子郵件">
+                    <button class="btn-small" onclick="sendOTP()">發送驗證碼</button>
+                </div>
+                <input type="text" id="reg-otp" placeholder="輸入 6 位數驗證碼">
+                <input type="password" id="reg-pass" placeholder="設定密碼">
+            </div>
+            <button class="btn-primary" onclick="handleRegister()">完成註冊</button>
+            <p class="footer-text">已有帳號？ <span onclick="switchCard('login-card')">返回登入</span></p>
+        </div>
+
+        <div id="download-card" class="glass-card" style="display: none;">
+            <h1>影片下載</h1>
+            <p>剩餘下載次數：<span id="quota-count">20</span></p>
+            <div class="input-group">
+                <input type="text" id="yt-url" placeholder="貼上 YouTube 網址">
+            </div>
+            <button class="btn-primary" onclick="startDownload()">立即下載</button>
+            <button class="btn-outline" onclick="logout()">登出</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
